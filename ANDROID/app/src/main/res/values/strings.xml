@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Uptchat</string>
+    <string name="urlRegistro">http://169.254.175.157/appelectiva/index.php/app/insertarUsuario</string>
+</resources>
