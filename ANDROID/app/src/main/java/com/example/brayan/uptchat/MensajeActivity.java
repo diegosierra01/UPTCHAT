@@ -100,7 +100,7 @@ public class MensajeActivity extends AppCompatActivity {
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.10/uptchat/index.php/chat/enviarMensaje"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.3/uptchat/index.php/chat/enviarMensaje"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -147,7 +147,7 @@ public class MensajeActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarMensajes?destinatario="+id;
+            URLconsulta="http://192.168.1.3/uptchat/index.php/chat/listarMensajes?destinatario="+id;
         }
 
         @Override
@@ -179,13 +179,15 @@ public class MensajeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                jsonObject=new JSONObject(result);
-                jsonArray=jsonObject.getJSONArray("mensajes");
-                for (int i=0; i < jsonArray.length();i++ ){
-                    JSONObject JSO = jsonArray.getJSONObject(i);
-                    items.add(JSO.getString("cadena")+"  "+JSO.getString("hora"));
-                }
-                adapter.notifyDataSetChanged();
+
+                    jsonObject = new JSONObject(result);
+                    jsonArray = jsonObject.getJSONArray("mensajes");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject JSO = jsonArray.getJSONObject(i);
+                        items.add(JSO.getString("cadena") + "  " + JSO.getString("hora"));
+                    }
+                    adapter.notifyDataSetChanged();
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();

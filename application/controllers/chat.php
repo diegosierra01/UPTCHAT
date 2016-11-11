@@ -81,4 +81,11 @@ class chat extends CI_Controller {
         echo "Registrado exitosamente.";
 
     }
+     public function addUserToGroup(){
+        $data['id_usuario'] = $this->input->post("id_usuario");
+        $data['id_grupo'] = $this->input->post("id_grupo");
+        $this->chatmodel->addUserToGroup($data);
+        echo "Registrado exitosamente.";
+
+    }
 }

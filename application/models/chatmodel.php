@@ -30,6 +30,9 @@ class chatmodel extends CI_Model {
     public function crearGrupo($data) {
         $this->db->insert('grupo', $data);
     }
+    public function addUserToGroup($data) {
+        $this->db->insert('usuario_grupo', $data);
+    }
     public function editaPerfil($id,$password) {
          $data = array(
             'password' => $password
@@ -57,6 +60,5 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
-    
-
+   
 }

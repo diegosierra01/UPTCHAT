@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,6 +46,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     ListView listView;
     String JSON_STRING;
     JSONObject jsonObject;
@@ -56,10 +60,14 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewNick;
     String idUser;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+       // setSupportActionBar(myToolbar);
         context=this;
 
         Resources res = getResources();
@@ -112,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         editTextNewPassword = (EditText) findViewById(R.id.editextPassword);
         textViewNick = (TextView)  findViewById(R.id.txtNickEdit);
         textViewNick.setText(nickUser);
+        textViewNick.setTextColor(Color.rgb(63,44,43));
+        textViewNick.setTextSize(24);
 
 
     }
@@ -125,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.1.4/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://192.168.1.3/uptchat/index.php/chat/listarUsuarios";
         }
 
         @Override

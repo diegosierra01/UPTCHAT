@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.10/uptchat/index.php/chat/registrar"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.3/uptchat/index.php/chat/registrar"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
