@@ -27,6 +27,9 @@ class chatmodel extends CI_Model {
     public function insertarMensaje($data) {
         $this->db->insert('mensaje', $data);
     }
+    public function crearGrupo($data) {
+        $this->db->insert('grupo', $data);
+    }
     public function editaPerfil($id,$password) {
          $data = array(
             'password' => $password
