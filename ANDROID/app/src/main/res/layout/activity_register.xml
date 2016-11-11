@@ -14,15 +14,16 @@
         android:layout_height="wrap_content"
         android:text="Registrarme"
         android:id="@+id/button3"
-        android:layout_centerVertical="true"
+        android:onClick="register"
+        android:layout_below="@+id/txtPassword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="register" />
+        android:layout_marginTop="83dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtNick"
+        android:id="@+id/txtNickEdit"
         android:hint="nick"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -38,10 +39,9 @@
         android:ems="10"
         android:id="@+id/txtPassword"
         android:hint="password"
-        android:layout_below="@+id/txtNick"
+        android:layout_below="@+id/txtNickEdit"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="56dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -53,4 +53,17 @@
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/txtConfiPasswd"
+        android:layout_below="@+id/txtPassword"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="confirmar password" />
 </RelativeLayout>

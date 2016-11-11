@@ -2,6 +2,7 @@ package com.example.brayan.uptchat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +10,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -27,7 +37,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
     BackgroundTask backgroundTask;
     List items2 = new ArrayList();
     UsuariosAdapter usuariosAdapter;
-    ArrayList<String> items;
-    ArrayAdapter<String> adapter;
+    EditText editTextNewPassword;
+    TextView textViewNick;
+    String idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
         spec=tabs.newTabSpec("mitab3");
         spec.setContent(R.id.tab3);
-        spec.setIndicator("TAB3",
-                res.getDrawable(android.R.drawable.ic_dialog_map));
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_border_color_black_24dp));
         tabs.addTab(spec);
 
         tabs.setCurrentTab(0);
@@ -82,44 +95,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-
                 Usuario user = (Usuario) listView.getAdapter().getItem(position);
-
                 Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
                 intent.putExtra("id",user.getId());
                 intent.putExtra("nick",user.getNick());
-
                 startActivity(intent);
-
             }
         });
-/*
-        items = new ArrayList<>();
-
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, items);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                String item = ((TextView)view).getText().toString();
-
-               // Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
-               //intent.putExtra("id",item);
-                intent.putExtra("nick",item);
-
-                startActivity(intent);
-
-            }
-        });
-*/
         backgroundTask =  new BackgroundTask(context);
         backgroundTask.execute();
-        //items.clear();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("dataSession", Context.MODE_PRIVATE);
+        idUser = sharedPreferences.getString("idUserSession", "");
+        String nickUser = sharedPreferences.getString("nickSession", "");
+
+        editTextNewPassword = (EditText) findViewById(R.id.editextPassword);
+        textViewNick = (TextView)  findViewById(R.id.txtNickEdit);
+        textViewNick.setText(nickUser);
+
 
     }
     class BackgroundTask extends AsyncTask<Void,Void,String> {
@@ -129,12 +122,10 @@ public class MainActivity extends AppCompatActivity {
 
         BackgroundTask(Context ctx){
             this.ctx=ctx;
-
         }
-
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://192.168.1.4/uptchat/index.php/chat/listarUsuarios";
         }
 
         @Override
@@ -171,9 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
                     items2.add(new Usuario(JSO.getString("id"),JSO.getString("nick")));
-                //    items.add(JSO.getString("nick"));
                 }
-              //  adapter.notifyDataSetChanged();
                 usuariosAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
@@ -185,4 +174,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void guardarDato(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.4/uptchat/index.php/chat/editarPerfil"),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        })    {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("id",String.valueOf(idUser));
+                map.put("password",editTextNewPassword.getText().toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(request);
+    }
+    public void cambiarPassword(View view) {
+            guardarDato();
+    }
 }

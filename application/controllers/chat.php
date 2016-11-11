@@ -59,6 +59,12 @@ class chat extends CI_Controller {
         echo "Registrado exitosamente.";
         
     }
+    public function editarPerfil(){       
+        $id = $this->input->post('id');
+        $password = $this->input->post("password");
+        $this->chatmodel->editaPerfil($id,$password);
+        echo "Cambio exitoso.";
+    }
     public function listarUsuarios() {
        
         $users = $this->chatmodel->listaUsuarios();

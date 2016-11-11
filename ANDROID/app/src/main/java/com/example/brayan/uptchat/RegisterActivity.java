@@ -23,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText editTextNick;
     EditText editTextPassword;
+    EditText editTextConfPassword;
     Context context;
 
 
@@ -30,16 +31,16 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        editTextNick = (EditText) findViewById(R.id.txtNick);
+        editTextNick = (EditText) findViewById(R.id.txtNickEdit);
         editTextPassword = (EditText) findViewById(R.id.txtPassword);
+        editTextConfPassword = (EditText) findViewById(R.id.txtConfiPasswd);
         context = this;
 
 
     }
-    //R.string.urlRegistro
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/registrar"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.10/uptchat/index.php/chat/registrar"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -57,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("nick",editTextNick.getText().toString());
                 map.put("password",editTextPassword.getText().toString());
+
                 return map;
             }
 
@@ -65,7 +67,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void register(View view) {
-        guardarDato();
+        if(editTextPassword.getText().toString().equals(editTextConfPassword.getText().toString())){
+            guardarDato();
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class );
+            startActivity(intent);
+        }else{
+            Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

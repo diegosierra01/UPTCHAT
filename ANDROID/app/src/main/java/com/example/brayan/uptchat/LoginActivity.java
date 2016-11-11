@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/autenticar?nick="+editTextNick.getText().toString()+"&password="+editTextPassword.getText().toString();
+            URLconsulta="http://192.168.1.4/uptchat/index.php/chat/autenticar?nick="+editTextNick.getText().toString()+"&password="+editTextPassword.getText().toString();
         }
 
         @Override
@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     JSONObject JSO = jsonArray.getJSONObject(0);
                     editor.putString("idUserSession",JSO.getString("id"));
+                    editor.putString("nickSession",JSO.getString("nick"));
                     editor.apply();
 
                     String id = sharedPreferences.getString("idUserSession","");

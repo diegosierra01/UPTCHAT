@@ -24,9 +24,17 @@ class chatmodel extends CI_Model {
     public function insertarUsuario($data) {
         $this->db->insert('usuario', $data);
     }
-     public function insertarMensaje($data) {
+    public function insertarMensaje($data) {
         $this->db->insert('mensaje', $data);
     }
+    public function editaPerfil($id,$password) {
+         $data = array(
+            'password' => $password
+         );
+       $this->db->where('id', $id); 
+       return $this->db->update('usuario', $data);
+    }
+  
     public function listaUsuarios(){
        $data = $this->db->query("Select id,nick from usuario");
         if ($data->num_rows() > 0) {

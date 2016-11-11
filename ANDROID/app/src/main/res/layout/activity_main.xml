@@ -50,16 +50,27 @@ android:orientation="vertical">
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 
-                <TextView android:id="@+id/textView3"
+                <TextView android:id="@+id/txtNickEdit"
                     android:text="Contenido Tab 3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/editextPassword"
+                    android:hint="nueva Password" />
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button" />
+                    android:text="Cambiar"
+                    android:id="@+id/button"
+                    android:onClick="cambiarPassword"
+                    android:contextClickable="false" />
+
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

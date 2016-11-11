@@ -100,7 +100,7 @@ public class MensajeActivity extends AppCompatActivity {
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/enviarMensaje"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.10/uptchat/index.php/chat/enviarMensaje"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
