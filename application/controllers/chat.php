@@ -75,5 +75,8 @@ class chat extends CI_Controller {
         $mensajes= $this->chatmodel->listarMensajes($destinatario);
         echo json_encode(array('mensajes' => $mensajes));
     }
+public function creargrupo(){
+    $data [' nombregrupo'] = $this->input->post("nombre");
 
+}
 }
