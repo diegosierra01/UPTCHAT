@@ -9,7 +9,8 @@
         android:layout_alignParentTop="true"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="false" />
+        android:focusable="false"
+        android:background="@drawable/selecter"/>
 
     <ImageView
         android:layout_width="wrap_content"

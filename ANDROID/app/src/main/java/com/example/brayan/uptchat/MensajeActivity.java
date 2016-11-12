@@ -3,6 +3,7 @@ package com.example.brayan.uptchat;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,6 +66,9 @@ public class MensajeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mensaje);
         textViewNick = (TextView) findViewById(R.id.textViewNick);
+        textViewNick.setTextColor(Color.rgb(63,44,43));
+        textViewNick.setTextSize(20);
+
         textViewConta = (TextView) findViewById(R.id.viewConta);
         editTextMensaje = (EditText) findViewById(R.id.editTextMensaje);
 
@@ -88,11 +92,8 @@ public class MensajeActivity extends AppCompatActivity {
         }
         backgroundTask =  new BackgroundTask(context);
         backgroundTask.execute();
-        items.clear();
 
         context = this;
-
-
         contadorCaracteres();
 
     }
@@ -100,7 +101,7 @@ public class MensajeActivity extends AppCompatActivity {
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.3/uptchat/index.php/chat/enviarMensaje"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/enviarMensaje"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -126,14 +127,15 @@ public class MensajeActivity extends AppCompatActivity {
 
         };
         requestQueue.add(request);
+
     }
 
 
     public void sendMsj(View view) {
         guardarDato();
-     /*   backgroundTask =  new BackgroundTask(context);
+        backgroundTask =  new BackgroundTask(context);
         backgroundTask.execute();
-        items.clear();*/
+
     }
     class BackgroundTask extends AsyncTask<Void,Void,String> {
 
@@ -147,7 +149,7 @@ public class MensajeActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.1.3/uptchat/index.php/chat/listarMensajes?destinatario="+id;
+            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarMensajes?destinatario="+id;
         }
 
         @Override
@@ -161,7 +163,6 @@ public class MensajeActivity extends AppCompatActivity {
                 while((JSON_STRING=bufferedReader.readLine())!=null){
                     stringBuilder.append(JSON_STRING+"\n");
                 }
-
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
@@ -179,7 +180,6 @@ public class MensajeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-
                     jsonObject = new JSONObject(result);
                     jsonArray = jsonObject.getJSONArray("mensajes");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -189,8 +189,10 @@ public class MensajeActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
+                //items.add("No hay mensajes" + "  ");
+                //adapter.notifyDataSetChanged();
+               // e.printStackTrace();
+                //Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }

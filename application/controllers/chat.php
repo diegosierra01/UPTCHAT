@@ -70,12 +70,17 @@ class chat extends CI_Controller {
         $users = $this->chatmodel->listaUsuarios();
         echo json_encode(array('usuarios' => $users));
     }
+     public function listarGrupos() {
+       
+        $grupos = $this->chatmodel->listaGrupos();
+        echo json_encode(array('grupos' => $grupos));
+    }
     public function listarMensajes() {
         $destinatario = $this->input->get("destinatario");
         $mensajes= $this->chatmodel->listarMensajes($destinatario);
         echo json_encode(array('mensajes' => $mensajes));
     }
-    public function creargrupo(){
+    public function registrarGrupo(){
         $data['nombre'] = $this->input->post("nombre");
         $this->chatmodel->crearGrupo($data);
         echo "Registrado exitosamente.";

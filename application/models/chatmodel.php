@@ -50,6 +50,17 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
+     public function listaGrupos(){
+        //*********OJO aca debe hacer el Join con la Table de usuario_grupo 
+        //para que solo le aperezcan los grupos a los que pertecene el usuario Logueado************
+       $data = $this->db->query("Select * from grupo");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
     public function listarMensajes($destinatario){
         //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
        $data = $this->db->query("SELECT cadena, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' ");

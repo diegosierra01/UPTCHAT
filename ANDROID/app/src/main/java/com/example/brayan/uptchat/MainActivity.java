@@ -9,10 +9,13 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -48,17 +51,24 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ListView listView;
+    ListView listViewGroup;
     String JSON_STRING;
     JSONObject jsonObject;
     JSONArray jsonArray;
     Context context;
 
     BackgroundTask backgroundTask;
-    List items2 = new ArrayList();
+    BackgroundTask2 backgroundTask2;
+    List itemsUser = new ArrayList();
     UsuariosAdapter usuariosAdapter;
+    List itemsGr = new ArrayList();
+    GruposAdapter gruposAdapter;
     EditText editTextNewPassword;
     TextView textViewNick;
     String idUser;
+    String idGroup;
+    ArrayList<String> list_idUsers;
+    int cont;
 
 
 
@@ -94,28 +104,107 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(spec);
 
         tabs.setCurrentTab(0);
+        backgroundTask =  new BackgroundTask(context);
+        backgroundTask.execute();
+        //itemsUser.clear();
+        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+               // Toast.makeText(context,tabId, Toast.LENGTH_SHORT).show();
+                switch (tabId){
+                    case "mitab1":
+                        backgroundTask =  new BackgroundTask(context);
+                        backgroundTask.execute();
+                        itemsUser.clear();
+                        break;
+                    case "mitab2":
+                        backgroundTask2 =  new BackgroundTask2(context);
+                        backgroundTask2.execute();
+                        itemsGr.clear();
+                        break;
+                }
+
+            }
+        });
 
         listView = (ListView) findViewById(R.id.listView);
-        usuariosAdapter = new UsuariosAdapter(this, items2);
+        usuariosAdapter = new UsuariosAdapter(this, itemsUser);
         listView.setAdapter(usuariosAdapter);
+
+        list_idUsers = new ArrayList<>();
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                cont++;
+                mode.setTitle(cont+" Seleccionados");
+                Usuario user = (Usuario) listView.getAdapter().getItem(position);
+                list_idUsers.add(user.getId());
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.context_menu,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
+                view.setSelected(true); //****new
+
                 Usuario user = (Usuario) listView.getAdapter().getItem(position);
                 Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
                 intent.putExtra("id",user.getId());
                 intent.putExtra("nick",user.getNick());
                 startActivity(intent);
+
             }
         });
-        backgroundTask =  new BackgroundTask(context);
-        backgroundTask.execute();
+
+
+        listViewGroup= (ListView) findViewById(R.id.listViewGrupos);
+        gruposAdapter = new GruposAdapter(this, itemsGr);
+        listViewGroup.setAdapter(gruposAdapter);
+
+        listViewGroup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                Grupo grupo = (Grupo) listViewGroup.getAdapter().getItem(position);
+                Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
+                intent.putExtra("id",grupo.getId());
+                intent.putExtra("nick",grupo.getNombre());
+                startActivity(intent);
+
+            }
+        });
+
+    //aqui bakcgrTAask
 
         SharedPreferences sharedPreferences = getSharedPreferences("dataSession", Context.MODE_PRIVATE);
         idUser = sharedPreferences.getString("idUserSession", "");
         String nickUser = sharedPreferences.getString("nickSession", "");
+        idGroup = sharedPreferences.getString("idGrupoSession", "");
+        String nombreGrupo = sharedPreferences.getString("nombreGrupoSession", "");
 
         editTextNewPassword = (EditText) findViewById(R.id.editextPassword);
         textViewNick = (TextView)  findViewById(R.id.txtNickEdit);
@@ -123,6 +212,11 @@ public class MainActivity extends AppCompatActivity {
         textViewNick.setTextColor(Color.rgb(63,44,43));
         textViewNick.setTextSize(24);
 
+
+    }
+    public void goCrearGrupo(View view) {
+        Intent intent = new Intent(MainActivity.this, RegistroGrupoActivity.class );
+        startActivity(intent);
 
     }
     class BackgroundTask extends AsyncTask<Void,Void,String> {
@@ -135,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.1.3/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarUsuarios";
         }
 
         @Override
@@ -171,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonArray=jsonObject.getJSONArray("usuarios");
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
-                    items2.add(new Usuario(JSO.getString("id"),JSO.getString("nick")));
+                    itemsUser.add(new Usuario(JSO.getString("id"),JSO.getString("nick")));
                 }
                 usuariosAdapter.notifyDataSetChanged();
 
@@ -183,6 +277,65 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    class BackgroundTask2 extends AsyncTask<Void,Void,String> {
+
+        Context ctx;
+        String URLconsulta="";
+
+        BackgroundTask2(Context ctx){
+            this.ctx=ctx;
+        }
+        @Override
+        protected void onPreExecute() {
+            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarGrupos";
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                URL url=new URL(URLconsulta);
+                HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+                InputStream inputStream=httpURLConnection.getInputStream();
+                BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder=new StringBuilder();
+                while((JSON_STRING=bufferedReader.readLine())!=null){
+                    stringBuilder.append(JSON_STRING+"\n");
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                jsonObject=new JSONObject(result);
+                jsonArray=jsonObject.getJSONArray("grupos");
+                for (int i=0; i < jsonArray.length();i++ ){
+                    JSONObject JSO = jsonArray.getJSONObject(i);
+                    itemsGr.add(new Grupo(JSO.getString("id"),JSO.getString("nombre")));
+                }
+                gruposAdapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+    }
+
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
