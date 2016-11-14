@@ -170,8 +170,9 @@ public class LlenaGrupoActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                JSONArray json = new JSONArray(idSeleccionados);
                 HashMap<String,String> map = new HashMap<>();
-                map.put("id_usuario",String.valueOf(idUsuario));//LO DIFICIL
+                map.put("usuarios",json.toString());
                 map.put("id_grupo",String.valueOf(idGrupo));
                 return map;
             }

@@ -61,9 +61,21 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
-    public function listarMensajes($destinatario){
+    public function listarMensajes($remitente, $destinatario){
         //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
-       $data = $this->db->query("SELECT cadena, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' ");
+       $data = $this->db->query("SELECT cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."'");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+
+
+    public function listarMensajesGrupo($grupo){
+        //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
+       $data = $this->db->query("SELECT remitente, cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$grupo ."'");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
