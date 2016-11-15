@@ -1,6 +1,7 @@
 package com.example.brayan.uptchat;
 
 public class Usuario {
+
         String id;
         String nick;
 

@@ -16,15 +16,16 @@ class chat extends CI_Controller {
        $numero = intval(preg_replace('/[^0-9]+/', '', $cadena), 10);
        $semiID = $numero + 1;
        $idAuto = 'U'.$semiID;       
-       return $idAuto;
-       
+       return $idAuto;   
     }
+
     public function encriptar($cadena){
         $key='';  
         $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cadena, MCRYPT_MODE_CBC, md5(md5($key))));
         return $encrypted; 
 
     }
+    
     public function desencriptar($cadena) {
             $key = ''; 
             $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($cadena), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
@@ -38,8 +39,7 @@ class chat extends CI_Controller {
         $data['password'] = $this->input->post("password");
        
         $this->chatmodel->insertarUsuario($data);
-        echo "Registrado exitosamente.";
-        
+        echo "Registrado exitosamente.";    
     }
    
     public function autenticar() {
@@ -48,6 +48,7 @@ class chat extends CI_Controller {
         $user = $this->chatmodel->authUser($nick,$password);
         echo json_encode(array('usuario' => $user));
     }
+    
     public function enviarMensaje() {
         $data['cadena'] = $this->input->post("cadena");
         $data['remitente'] = $this->input->post("remitente");
@@ -59,38 +60,55 @@ class chat extends CI_Controller {
         echo "Registrado exitosamente.";
         
     }
+    
     public function editarPerfil(){       
         $id = $this->input->post('id');
         $password = $this->input->post("password");
         $this->chatmodel->editaPerfil($id,$password);
         echo "Cambio exitoso.";
     }
+    
     public function listarUsuarios() {
        
         $users = $this->chatmodel->listaUsuarios();
         echo json_encode(array('usuarios' => $users));
     }
-     public function listarGrupos() {
+    
+    public function listarGrupos() {
        
         $grupos = $this->chatmodel->listaGrupos();
         echo json_encode(array('grupos' => $grupos));
     }
+
     public function listarMensajes() {
         $destinatario = $this->input->get("destinatario");
-        $mensajes= $this->chatmodel->listarMensajes($destinatario);
+        $remitente = $this->input->get("remitente");
+        $mensajes= $this->chatmodel->listarMensajes($remitente, $destinatario);
         echo json_encode(array('mensajes' => $mensajes));
     }
-    public function registrarGrupo(){
+
+    public function listarMensajesGrupo(){
+        $grupo = $this->input->get("remitente");
+        $mensajes= $this->chatmodel->listarMensajesGrupo($grupo);
+        echo json_encode(array('mensajes' => $mensajes));
+    }
+    
+    public function crearGrupo(){
         $data['nombre'] = $this->input->post("nombre");
         $this->chatmodel->crearGrupo($data);
-        echo "Registrado exitosamente.";
+        echo "Grupo registrado exitosamente.";
 
     }
-     public function addUserToGroup(){
-        $data['id_usuario'] = $this->input->post("id_usuario");
+    
+    public function addUserToGroup(){
         $data['id_grupo'] = $this->input->post("id_grupo");
-        $this->chatmodel->addUserToGroup($data);
-        echo "Registrado exitosamente.";
+        $usuarios = $this->input->post("usuarios");
+        $seleccionados = json_decode($usuarios);
+        foreach ($seleccionados as $indice => $valor) {
+            $data['id_usuario'] = $valor;
+            $this->chatmodel->addUserToGroup($data);
+        }
+        echo "Usuarios añadidos correctamente.";
 
     }
 }
