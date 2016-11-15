@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GruposAdapter extends BaseAdapter {
@@ -35,6 +36,8 @@ public class GruposAdapter extends BaseAdapter {
         return position;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -45,6 +48,7 @@ public class GruposAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.activity_fields, parent, false);
         }
+
 
 
         TextView tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
