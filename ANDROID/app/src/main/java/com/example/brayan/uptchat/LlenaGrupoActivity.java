@@ -75,7 +75,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
         listView.setAdapter(usuariosAdapter);
 
         setupActionBar();
-       /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
@@ -85,7 +85,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
                 idSeleccionados.add(idUsuario);
 
             }
-        });*/
+        });
         /*listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
@@ -255,11 +255,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 JSONArray json = new JSONArray(idSeleccionados);
                 HashMap<String,String> map = new HashMap<>();
-<<<<<<< HEAD
-                map.put("id_usuario",String.valueOf(idUsuario));
-=======
                 map.put("usuarios",json.toString());
->>>>>>> 1ea54aaf53e8438d6087c32a9d9299e14436b0f2
                 map.put("id_grupo",String.valueOf(idGrupo));
                 return map;
             }

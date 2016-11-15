@@ -63,7 +63,7 @@ class chatmodel extends CI_Model {
     }
     public function listarMensajes($remitente, $destinatario){
         //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
-       $data = $this->db->query("SELECT cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."'");
+       $data = $this->db->query("SELECT cadena, fecha, hora,remitente  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."'");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;

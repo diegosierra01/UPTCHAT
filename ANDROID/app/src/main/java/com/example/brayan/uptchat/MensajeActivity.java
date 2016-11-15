@@ -114,6 +114,7 @@ public class MensajeActivity extends AppCompatActivity {
             }
         })    {
 
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<>();
@@ -149,7 +150,7 @@ public class MensajeActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarMensajes?destinatario="+id;
+            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarMensajes?destinatario="+id+"&remitente="+String.valueOf(idUser);
         }
 
         @Override
@@ -184,7 +185,7 @@ public class MensajeActivity extends AppCompatActivity {
                     jsonArray = jsonObject.getJSONArray("mensajes");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject JSO = jsonArray.getJSONObject(i);
-                        items.add(JSO.getString("cadena") + "  " + JSO.getString("hora"));
+                        items.add(JSO.getString("cadena") + "  " + JSO.getString("hora")+" "+JSO.getString("remitente"));
                     }
                     adapter.notifyDataSetChanged();
 
