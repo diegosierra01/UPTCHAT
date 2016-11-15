@@ -15,8 +15,15 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
-     public function getUltimo(){
-       $query = $this->db->query("SELECT id FROM usuario Order by id Desc limit 1"); 
+
+     public function getUltimoGrupo(){
+       $query = $this->db->query("SELECT idgrupo FROM grupo Order by id Desc limit 1"); 
+       $row = $query->row(0);       
+       return $row->id;     
+    }
+
+    public function getUltimoUsuario(){
+       $query = $this->db->query("SELECT idusuario FROM usuario Order by id Desc limit 1"); 
        $row = $query->row(0);       
        return $row->id;     
     }
@@ -30,6 +37,7 @@ class chatmodel extends CI_Model {
     public function crearGrupo($data) {
         $this->db->insert('grupo', $data);
     }
+
     public function addUserToGroup($data) {
         $this->db->insert('usuario_grupo', $data);
     }
@@ -63,7 +71,7 @@ class chatmodel extends CI_Model {
     }
     public function listarMensajes($remitente, $destinatario){
         //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
-       $data = $this->db->query("SELECT cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."'");
+       $data = $this->db->query("SELECT remitente, cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."' UNION SELECT cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$remitente ."' AND remitente = '".$destinatario ."' ");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;

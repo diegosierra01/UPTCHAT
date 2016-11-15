@@ -10,12 +10,22 @@ class chat extends CI_Controller {
         $this->load->model("chatmodel");
     }
 
-    public function newId() {
+    public function newIdUsuario() {
         
-       $cadena =  $this->chatmodel->getUltimo();
+       $cadena =  $this->chatmodel->getUltimoUsuario();
        $numero = intval(preg_replace('/[^0-9]+/', '', $cadena), 10);
        $semiID = $numero + 1;
        $idAuto = 'U'.$semiID;       
+       return $idAuto;   
+    }
+
+
+    public function newIdGrupo() {
+        
+       $cadena =  $this->chatmodel->getUltimoGrupo();
+       $numero = intval(preg_replace('/[^0-9]+/', '', $cadena), 10);
+       $semiID = $numero + 1;
+       $idAuto = 'G'.$semiID;       
        return $idAuto;   
     }
 
@@ -53,11 +63,9 @@ class chat extends CI_Controller {
         $data['cadena'] = $this->input->post("cadena");
         $data['remitente'] = $this->input->post("remitente");
         $data['destinatario'] = $this->input->post("destinatario");
-        $data['fecha'] = $this->input->post("fecha");
-        $data['hora'] = $this->input->post("hora");
-       
+        
         $this->chatmodel->insertarMensaje($data);
-        echo "Registrado exitosamente.";
+        echo "Enviado exitosamente.";
         
     }
     
@@ -104,11 +112,10 @@ class chat extends CI_Controller {
         $data['id_grupo'] = $this->input->post("id_grupo");
         $usuarios = $this->input->post("usuarios");
         $seleccionados = json_decode($usuarios);
-        foreach ($seleccionados as $indice => $valor) {
+        foreach ($seleccionados as $inputdice => $valor) {
             $data['id_usuario'] = $valor;
             $this->chatmodel->addUserToGroup($data);
         }
         echo "Usuarios añadidos correctamente.";
-
     }
 }
