@@ -16,6 +16,7 @@ public class UsuariosAdapter extends BaseAdapter {
 
     private Context context;
     private List<Usuario> items;
+    private ArrayList<Integer> mSelection = new ArrayList<Integer>();
 
     public UsuariosAdapter(Context context, List<Usuario> items) {
         this.context = context;
@@ -36,6 +37,18 @@ public class UsuariosAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    public void setNewSelection(int position) {
+        mSelection.add(position);
+        notifyDataSetChanged();
+    }
+    public void removeSelection(int position) {
+        mSelection.remove(Integer.valueOf(position));
+        notifyDataSetChanged();
+    }
+    public int getSelectionCount() {
+        return mSelection.size();
+    }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,7 +61,10 @@ public class UsuariosAdapter extends BaseAdapter {
             rowView = inflater.inflate(R.layout.activity_fields, parent, false);
         }
 
-
+       /* if (mSelection.contains(position)) {
+            rowView.setBackgroundColor(context.getResources().getColor(
+                    android.R.color.tab_indicator_text)); // color when selected
+        }*/
         TextView tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
         ImageView imgImg = (ImageView) rowView.findViewById(R.id.imageView);
 

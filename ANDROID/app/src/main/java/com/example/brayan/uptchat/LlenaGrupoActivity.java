@@ -7,7 +7,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -54,6 +59,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
     String idUsuario;
     List<String> idSeleccionados = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,17 +73,51 @@ public class LlenaGrupoActivity extends AppCompatActivity {
 
         usuariosAdapter = new UsuariosAdapter(this, itemsUser);
         listView.setAdapter(usuariosAdapter);
+
+        setupActionBar();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                view.setSelected(true); 
+                view.setSelected(true);
                 Usuario user = (Usuario) listView.getAdapter().getItem(position);
                 idUsuario = user.getId();
                 idSeleccionados.add(idUsuario);
 
             }
         });
+        /*listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                //cont++;
+                mode.setTitle("Seleccionados");
+                Usuario user = (Usuario) listView.getAdapter().getItem(position);
+                idSeleccionados.add(user.getId());
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.context_menu,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
+*/
 
 
 
@@ -93,6 +133,48 @@ public class LlenaGrupoActivity extends AppCompatActivity {
         backgroundTask =  new BackgroundTask(context);
         backgroundTask.execute();
 
+    }
+    private void setupActionBar() {
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                                                  int position, long id, boolean checked) {
+
+                if (checked) {
+                    usuariosAdapter.setNewSelection(position);
+                } else {
+                    usuariosAdapter.removeSelection(position);
+                }
+
+                mode.setTitle(usuariosAdapter.getSelectionCount() + " items selected");
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return  true;
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+                // CAB is initialized
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.context_menu, menu);
+
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+        });
     }
 
     class BackgroundTask extends AsyncTask<Void,Void,String> {
@@ -154,6 +236,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
 
     }
     private void guardarDato(){
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/addUserToGroup"),
                 new Response.Listener<String>() {
