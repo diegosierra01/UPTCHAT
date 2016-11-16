@@ -58,10 +58,10 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
-     public function listaGrupos(){
+     public function listaGrupos($id){
         //*********OJO aca debe hacer el Join con la Table de usuario_grupo 
         //para que solo le aperezcan los grupos a los que pertecene el usuario Logueado************
-       $data = $this->db->query("Select * from grupo");
+       $data = $this->db->query("SELECT nombre from grupo g INNER JOIN usuario_grupo u ON u.id_grupo = g.id WHERE u.id_usuario='".$id ."'");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
@@ -70,8 +70,7 @@ class chatmodel extends CI_Model {
         }
     }
     public function listarMensajes($remitente, $destinatario){
-        //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
-       $data = $this->db->query("SELECT remitente, cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."' UNION SELECT cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$remitente ."' AND remitente = '".$destinatario ."' ");
+       $data = $this->db->query("SELECT nick, cadena, fecha, hora FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."' UNION SELECT *  FROM mensaje WHERE destinatario = '".$remitente ."' AND remitente = '".$destinatario ."') m ON m.remitente = u.idusuario order by hora");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
@@ -82,8 +81,7 @@ class chatmodel extends CI_Model {
 
 
     public function listarMensajesGrupo($grupo){
-        //SELECT cadena,DATE_FORMAT(fecha, '%H:%I:%S')as fecha  FROM mensaje WHERE destinatario = 'U2'
-       $data = $this->db->query("SELECT remitente, cadena, fecha, hora  FROM mensaje WHERE destinatario = '".$grupo ."'");
+       $data = $this->db->query("SELECT nick, cadena, fecha, hora FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$grupo ."') m ON m.remitente = u.idusuario order by hora");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;

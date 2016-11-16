@@ -82,9 +82,9 @@ class chat extends CI_Controller {
         echo json_encode(array('usuarios' => $users));
     }
     
-    public function listarGrupos() {
-       
-        $grupos = $this->chatmodel->listaGrupos();
+    public function listarGrupos() {   
+        $id = $this->input->post("id");
+        $grupos = $this->chatmodel->listaGrupos($id);
         echo json_encode(array('grupos' => $grupos));
     }
 
