@@ -18,7 +18,7 @@ CREATE TABLE MENSAJE (
 		idmensaje      INT   	     NOT NULL AUTO_INCREMENT, 
 		cadena         VARCHAR(255) NOT NULL,
 		destinatario   VARCHAR(10)       NOT NULL,
-		fecha          TIMESTAMP     NOT NULL,
+		fecha          TIMESTAMP     DEFAULT LOCALTIME,
 		remitente      VARCHAR(10)  NOT NULL,
 		CONSTRAINT men_pk_idm PRIMARY KEY (idmensaje)
 );
@@ -49,9 +49,27 @@ ALTER TABLE USUARIO_GRUPO ADD(
 --INSERCION A TABLA GRUPO
 
 INSERT INTO GRUPO (idgrupo, nombre) VALUES
-(1, 'grupo1'),
-(2, 'grupo 2'),
-(3, 'grupo3');
+('G1', 'grupo1'),
+('G2', 'grupo 2'),
+('G3', 'grupo3');
+
+--INSERCION TABLA USUARIO
+
+INSERT INTO USUARIO (idusuario, nick, password) VALUES
+('U1', 'loco', 'a123'),
+('U2', 'Emili', 'a123'),
+('U3', 'jose', 'qw13'),
+('U4', 'dieho', '1234'),
+('U5', 'hugo', '1234567');
+
+--INSERCION TABLA USUARIO_GRUPO
+
+INSERT INTO USUARIO_GRUPO (idusuario, idgrupo) VALUES
+('U5', 'G3'),
+('U4', 'G1'),
+('U5', 'G2'),
+('U2', 'G3');
+
 
 --INSERCION A TABLA MENSAJE
 
@@ -65,20 +83,3 @@ INSERT INTO MENSAJE (idmensaje, cadena, destinatario, fecha, remitente) VALUES
 (11, 'nada', 'U1', '9/11/2016 7:32 A.M', 'U2'),
 (13, 'Hi', 'U1', '10/11/2016 9:21 A.M', 'U2'),
 (14, 'buenas', 'U1', '10/11/2016 9:21 A.M', 'U1');
-
---INSERCION TABLA USUARIO
-
-INSERT INTO USUARIO (idusuario, nick, password) VALUES
-('U1', 'loco', 'a123'),
-('U2', 'Emili', 'a123'),
-('U3', 'jose', 'qw13'),
-('U4', 'dieho', '1234'),
-('U5', 'hugo', '1234567');
-
---INSERCION TABLA USUARIO_GRUPO
-
-INSERT INTO USUARIO_GRUPO (idgrupo, idusuario) VALUES
-('U5', '3'),s
-('U4', '1'),
-('U5', '2'),
-('U2', '3');

@@ -17,15 +17,15 @@ class chatmodel extends CI_Model {
     }
 
      public function getUltimoGrupo(){
-       $query = $this->db->query("SELECT idgrupo FROM grupo Order by id Desc limit 1"); 
+       $query = $this->db->query("SELECT idgrupo FROM grupo Order by idgrupo Desc limit 1"); 
        $row = $query->row(0);       
-       return $row->id;     
+       return $row->idgrupo;     
     }
 
     public function getUltimoUsuario(){
-       $query = $this->db->query("SELECT idusuario FROM usuario Order by id Desc limit 1"); 
+       $query = $this->db->query("SELECT idusuario FROM usuario Order by idusuario Desc limit 1"); 
        $row = $query->row(0);       
-       return $row->id;     
+       return $row->idusuario;     
     }
    
     public function insertarUsuario($data) {
@@ -45,12 +45,12 @@ class chatmodel extends CI_Model {
          $data = array(
             'password' => $password
          );
-       $this->db->where('id', $id); 
+       $this->db->where('idusuario', $id); 
        return $this->db->update('usuario', $data);
     }
   
     public function listaUsuarios(){
-       $data = $this->db->query("Select id,nick from usuario");
+       $data = $this->db->query("Select idusuario,nick from usuario");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
@@ -58,10 +58,10 @@ class chatmodel extends CI_Model {
             return FALSE;
         }
     }
-     public function listaGrupos($id){
+     public function listaGrupos($idusuario){
         //*********OJO aca debe hacer el Join con la Table de usuario_grupo 
         //para que solo le aperezcan los grupos a los que pertecene el usuario Logueado************
-       $data = $this->db->query("SELECT nombre from grupo g INNER JOIN usuario_grupo u ON u.id_grupo = g.id WHERE u.id_usuario='".$id ."'");
+       $data = $this->db->query("SELECT nombre from grupo g INNER JOIN usuario_grupo u ON u.idgrupo = g.id WHERE u.idusuario='".$idusuario ."'");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
@@ -70,7 +70,7 @@ class chatmodel extends CI_Model {
         }
     }
     public function listarMensajes($remitente, $destinatario){
-       $data = $this->db->query("SELECT nick, cadena, fecha, hora FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."' UNION SELECT *  FROM mensaje WHERE destinatario = '".$remitente ."' AND remitente = '".$destinatario ."') m ON m.remitente = u.idusuario order by hora");
+       $data = $this->db->query("SELECT nick, cadena, fecha FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$destinatario ."' AND remitente = '".$remitente ."' UNION SELECT *  FROM mensaje WHERE destinatario = '".$remitente ."' AND remitente = '".$destinatario ."') m ON m.remitente = u.idusuario order by hora");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
@@ -79,9 +79,8 @@ class chatmodel extends CI_Model {
         }
     }
 
-
     public function listarMensajesGrupo($grupo){
-       $data = $this->db->query("SELECT nick, cadena, fecha, hora FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$grupo ."') m ON m.remitente = u.idusuario order by hora");
+       $data = $this->db->query("SELECT nick, cadena, fecha FROM usuario u INNER JOIN(SELECT * FROM mensaje WHERE destinatario = '".$grupo ."') m ON m.remitente = u.idusuario order by hora");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;
