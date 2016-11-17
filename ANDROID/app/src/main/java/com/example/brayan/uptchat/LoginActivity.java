@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/autenticar?nick="+editTextNick.getText().toString()+"&password="+editTextPassword.getText().toString();
+            URLconsulta="http://"+R.string.ipBase + "/uptchat/index.php/chat/autenticar?nick="+editTextNick.getText().toString()+"&password="+editTextPassword.getText().toString();
         }
 
         @Override
