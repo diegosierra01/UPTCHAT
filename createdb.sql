@@ -18,7 +18,7 @@ CREATE TABLE MENSAJE (
 		idmensaje      INT   	     NOT NULL AUTO_INCREMENT, 
 		cadena         VARCHAR(255) NOT NULL,
 		destinatario   VARCHAR(10)       NOT NULL,
-		fecha          TIMESTAMP     NOT NULL,
+		fecha          TIMESTAMP     DEFAULT LOCALTIME,
 		remitente      VARCHAR(10)  NOT NULL,
 		CONSTRAINT men_pk_idm PRIMARY KEY (idmensaje)
 );
