@@ -49,22 +49,9 @@ ALTER TABLE USUARIO_GRUPO ADD(
 --INSERCION A TABLA GRUPO
 
 INSERT INTO GRUPO (idgrupo, nombre) VALUES
-(1, 'grupo1'),
-(2, 'grupo 2'),
-(3, 'grupo3');
-
---INSERCION A TABLA MENSAJE
-
-INSERT INTO MENSAJE (idmensaje, cadena, destinatario, fecha, remitente) VALUES
-(1, 'msj quemado', 'U1', '9/11/2016 6:46 P.M', 'U2'),
-(2, 'Hola', 'U1', '9/11/2016 6:29 P.M', 'U2'),
-(3, 'sin embargo', 'U2', '9/11/2016 6:51 A.M', 'U1'),
-(5, 'Perro', 'U1', '9/11/2016 7:17 A.M', 'U1'),
-(6, 'Gato', 'U1', '9/11/2016 7:22 AM', 'U2'),
-(7, 'Hola XYZ', 'U1', '9/11/2016 7:23 AM', 'U2'),
-(11, 'nada', 'U1', '9/11/2016 7:32 A.M', 'U2'),
-(13, 'Hi', 'U1', '10/11/2016 9:21 A.M', 'U2'),
-(14, 'buenas', 'U1', '10/11/2016 9:21 A.M', 'U1');
+('G1', 'grupo1'),
+('G2', 'grupo2'),
+('G3', 'grupo3');
 
 --INSERCION TABLA USUARIO
 
@@ -78,7 +65,20 @@ INSERT INTO USUARIO (idusuario, nick, password) VALUES
 --INSERCION TABLA USUARIO_GRUPO
 
 INSERT INTO USUARIO_GRUPO (idgrupo, idusuario) VALUES
-('U5', '3'),s
-('U4', '1'),
-('U5', '2'),
-('U2', '3');
+('G1', 'U5'),
+('G2', 'U4'),
+('G3', 'U5'),
+('G2', 'U2');
+
+--INSERCION A TABLA MENSAJE
+
+INSERT INTO MENSAJE (idmensaje, cadena, destinatario, fecha, remitente) VALUES
+(1, 'msj quemado', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(2, 'Hola', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(3, 'sin embargo', 'U2', CURRENT_TIMESTAMP, 'U1'),
+(5, 'Perro', 'U1', CURRENT_TIMESTAMP, 'U1'),
+(6, 'Gato', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(7, 'Hola XYZ', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(11, 'nada', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(13, 'Hi', 'U1', CURRENT_TIMESTAMP, 'U2'),
+(14, 'buenas', 'U1', CURRENT_TIMESTAMP, 'U1');
