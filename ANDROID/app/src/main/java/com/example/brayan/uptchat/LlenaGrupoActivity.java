@@ -187,7 +187,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarUsuarios";
         }
 
         @Override
@@ -223,7 +223,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
                 jsonArray=jsonObject.getJSONArray("usuarios");
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
-                    itemsUser.add(new Usuario(JSO.getString("id"),JSO.getString("nick")));
+                    itemsUser.add(new Usuario(JSO.getString("idusuario"),JSO.getString("nick")));
                 }
                 usuariosAdapter.notifyDataSetChanged();
 
@@ -238,7 +238,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
     private void guardarDato(){
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/addUserToGroup"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/addUserToGroup"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -60,6 +60,7 @@ public class MensajeActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
 
     String id;
+    String tipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class MensajeActivity extends AppCompatActivity {
         if (extras != null) {
             String nick = (String)extras.get("nick");
             id = (String)extras.get("id");
+            tipo = (String)extras.get("tipo");
             textViewNick.setText(nick);
 
         }
@@ -101,7 +103,7 @@ public class MensajeActivity extends AppCompatActivity {
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/enviarMensaje"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/enviarMensaje"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -120,15 +122,14 @@ public class MensajeActivity extends AppCompatActivity {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("cadena",editTextMensaje.getText().toString());
                 map.put("remitente",String.valueOf(idUser));
-                map.put("destinatario",String.valueOf(id));//***** CAMBIAR
-                map.put("fecha",String.valueOf(getFecha()));
-                map.put("hora",String.valueOf(getHora()));
+                map.put("destinatario", String.valueOf(id));
                 return map;
             }
 
         };
         requestQueue.add(request);
-
+        backgroundTask =  new BackgroundTask(context);
+        backgroundTask.execute();
     }
 
 
@@ -142,6 +143,7 @@ public class MensajeActivity extends AppCompatActivity {
 
         Context ctx;
         String URLconsulta="";
+        String prueba="";
 
         BackgroundTask(Context ctx){
             this.ctx=ctx;
@@ -150,7 +152,11 @@ public class MensajeActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarMensajes?destinatario="+id+"&remitente="+String.valueOf(idUser);
+            if(tipo.toString().equalsIgnoreCase("usuario")){
+                URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarMensajes?destinatario="+String.valueOf(id)+"&remitente="+String.valueOf(idUser);
+            }else{
+                URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarMensajesGrupo?destinatario="+String.valueOf(id);
+            }
         }
 
         @Override
@@ -181,19 +187,21 @@ public class MensajeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                    jsonObject = new JSONObject(result);
-                    jsonArray = jsonObject.getJSONArray("mensajes");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject JSO = jsonArray.getJSONObject(i);
-                        items.add(JSO.getString("cadena") + "  " + JSO.getString("hora")+" "+JSO.getString("remitente"));
+                    if(!result.equalsIgnoreCase("FALSE")) {
+                        jsonObject = new JSONObject(result);
+                        jsonArray = jsonObject.getJSONArray("mensajes");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject JSO = jsonArray.getJSONObject(i);
+                            items.add(JSO.getString("nick") + ": " + JSO.getString("cadena") + "   " + JSO.getString("fecha"));
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
-                //items.add("No hay mensajes" + "  ");
-                //adapter.notifyDataSetChanged();
-               // e.printStackTrace();
-                //Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
+                items.add("No hay mensajes" + "  ");
+                adapter.notifyDataSetChanged();
+                e.printStackTrace();
+                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }

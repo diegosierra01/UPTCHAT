@@ -78,7 +78,7 @@ public class RegistroGrupoActivity extends AppCompatActivity {
     }
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.43.23/uptchat/index.php/chat/crearGrupo"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/crearGrupo"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -119,7 +119,7 @@ public class RegistroGrupoActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarGrupos";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarGrupos";
         }
 
         @Override
@@ -155,7 +155,7 @@ public class RegistroGrupoActivity extends AppCompatActivity {
                 jsonArray=jsonObject.getJSONArray("grupos");
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
-                    itemsGr.add(new Grupo(JSO.getString("id"),JSO.getString("nombre")));
+                    itemsGr.add(new Grupo(JSO.getString("idgrupo"),JSO.getString("nombre")));
                 }
                 gruposAdapter.notifyDataSetChanged();
 

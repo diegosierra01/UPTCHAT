@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
                 intent.putExtra("id",user.getId());
                 intent.putExtra("nick",user.getNick());
+                intent.putExtra("tipo","usuario");
                 startActivity(intent);
 
             }
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MensajeActivity.class );
                 intent.putExtra("id",grupo.getId());
                 intent.putExtra("nick",grupo.getNombre());
+                intent.putExtra("tipo","grupo");
                 startActivity(intent);
 
             }
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarUsuarios";
         }
 
         @Override
@@ -234,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonArray=jsonObject.getJSONArray("usuarios");
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
-                    itemsUser.add(new Usuario(JSO.getString("id"),JSO.getString("nick")));
+                    itemsUser.add(new Usuario(JSO.getString("idusuario"),JSO.getString("nick")));
                 }
                 usuariosAdapter.notifyDataSetChanged();
 
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://192.168.43.23/uptchat/index.php/chat/listarGrupos";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarGrupos?idusuario="+String.valueOf(idUser);
         }
 
         @Override
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonArray=jsonObject.getJSONArray("grupos");
                 for (int i=0; i < jsonArray.length();i++ ){
                     JSONObject JSO = jsonArray.getJSONObject(i);
-                    itemsGr.add(new Grupo(JSO.getString("id"),JSO.getString("nombre")));
+                    itemsGr.add(new Grupo(JSO.getString("idgrupo"),JSO.getString("nombre")));
                 }
                 gruposAdapter.notifyDataSetChanged();
 
@@ -308,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://192.168.1.4/uptchat/index.php/chat/editarPerfil"),
+        StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/editarPerfil"),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
