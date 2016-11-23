@@ -299,8 +299,8 @@ public class MainActivity extends AppCompatActivity {
                 gruposAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
+               // e.printStackTrace();
+               // Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }

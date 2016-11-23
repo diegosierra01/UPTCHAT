@@ -35,7 +35,7 @@ class chatmodel extends CI_Model {
         $this->db->insert('mensaje', $data);
     }
     public function crearGrupo($data) {
-        $this->db->insert('grupo', $data);
+        $this->db->insert('grupo', $data);      
     }
 
     public function addUserToGroup($data) {
@@ -61,7 +61,17 @@ class chatmodel extends CI_Model {
      public function listaGrupos($idusuario){
         //*********OJO aca debe hacer el Join con la Table de usuario_grupo 
         //para que solo le aperezcan los grupos a los que pertecene el usuario Logueado************
-       $data = $this->db->query("SELECT u.idgrupo, nombre from grupo g INNER JOIN usuario_grupo u ON u.idgrupo = g.idgrupo WHERE u.idusuario='".$idusuario ."'");
+       $data = $this->db->query("SELECT u.idgrupo, g.nombre from grupo g INNER JOIN usuario_grupo u ON u.idgrupo = g.idgrupo WHERE u.idusuario='".$idusuario ."'");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+     public function listaAllGrupos(){
+      
+       $data = $this->db->query("SELECT * from grupo");
         if ($data->num_rows() > 0) {
             $data = $data->result();
             return $data;

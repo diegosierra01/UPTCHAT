@@ -82,6 +82,11 @@ class chat extends CI_Controller {
         //$grupos[0]->nombre=$this->desencriptar($grupos[0]->nombre);
         echo json_encode(array('grupos' => $grupos));
     }
+    public function listarAllGrupos() {   
+      
+        $grupos = $this->chatmodel->listaAllGrupos();
+        echo json_encode(array('grupos' => $grupos));
+    }
 
     public function listarMensajes() {
         $destinatario = $this->input->get("destinatario");
@@ -101,15 +106,20 @@ class chat extends CI_Controller {
         //$nombre = $this->encriptar($this->input->post("nombre"));
         $data['nombre'] = $this->input->post("nombre");
         $this->chatmodel->crearGrupo($data);
-        echo "Grupo registrado exitosamente.";
+       /* $dataUG['idgrupo'] =   'G3';
+        $dataUG['idusuario'] = $this->input->post("idusuario"); 
+        $this->chatmodel->addUserToGroup($dataUG);
+        */
+        echo "Grupo registrado exitosamente.";       
     }
     
+
     public function addUserToGroup(){
-        $data['idgrupo'] = $this->input->post("id_grupo");
+        $data['idgrupo'] =  $this->input->post("idgrupo");
         $usuarios = $this->input->post("usuarios");
         $seleccionados = json_decode($usuarios);
         foreach ($seleccionados as $inputdice => $valor) {
-            $data['idusuario'] = $valor;
+            $data['idusuario'] = $valor;            
             $this->chatmodel->addUserToGroup($data);
         }
         echo "Usuarios añadidos correctamente.";

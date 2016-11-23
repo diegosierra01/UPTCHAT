@@ -2,6 +2,8 @@ package com.example.brayan.uptchat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -46,7 +49,7 @@ public class RegistroGrupoActivity extends AppCompatActivity {
     GruposAdapter gruposAdapter;
     ListView listViewGroup;
     BackgroundTask2 backgroundTask2;
-
+    String idUser;
 
 
     @Override
@@ -55,6 +58,10 @@ public class RegistroGrupoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registro_grupo);
         editTextNombre = (EditText) findViewById(R.id.nombreGrupo);
         context = this;
+
+        SharedPreferences sharedPreferences = getSharedPreferences("dataSession", Context.MODE_PRIVATE);
+        idUser = sharedPreferences.getString("idUserSession", "");
+
         backgroundTask2 =  new BackgroundTask2(context);
         backgroundTask2.execute();
         itemsGr.clear();
@@ -75,6 +82,29 @@ public class RegistroGrupoActivity extends AppCompatActivity {
 
             }
         });
+
+      /*  listViewGroup = (ListView) findViewById(R.id.listViewMisGrupos);
+
+        itemsUser = new ArrayList<>();
+
+        usuariosAdapter = new UsuariosAdapter(this, itemsUser);
+        listViewGroup.setAdapter(usuariosAdapter);
+
+
+        listViewGroup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                view.setSelected(true);
+                Usuario user = (Usuario) listViewGroup.getAdapter().getItem(position);
+                idUsuario = user.getId();
+                idSeleccionados.add(idUsuario);
+
+            }
+        });
+        backgroundTask =  new BackgroundTask(context);
+        backgroundTask.execute();
+*/
     }
     private void guardarDato(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -93,8 +123,10 @@ public class RegistroGrupoActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+
                 HashMap<String,String> map = new HashMap<>();
                 map.put("nombre",editTextNombre.getText().toString());
+               // map.put("idusuario",String.valueOf(idUser));
                 return map;
             }
 
@@ -103,12 +135,17 @@ public class RegistroGrupoActivity extends AppCompatActivity {
     }
 
     public void registerGrupo(View view) {
+       /* for (int i=0; i < idSeleccionados.size();i++){
+            Toast.makeText(RegistroGrupoActivity.this,"Seleccionados: "+ idSeleccionados.get(i), Toast.LENGTH_SHORT).show();
+        }*/
             guardarDato();
-        backgroundTask2 =  new BackgroundTask2(context);
+       backgroundTask2 =  new BackgroundTask2(context);
         backgroundTask2.execute();
         itemsGr.clear();
 
     }
+
+
     class BackgroundTask2 extends AsyncTask<Void,Void,String> {
 
         Context ctx;
@@ -119,7 +156,7 @@ public class RegistroGrupoActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarGrupos";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarAllGrupos";//?idusuario="+String.valueOf(idUser)
         }
 
         @Override

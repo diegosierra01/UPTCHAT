@@ -79,7 +79,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                view.setSelected(true);
+             //   view.setSelected(true);
                 Usuario user = (Usuario) listView.getAdapter().getItem(position);
                 idUsuario = user.getId();
                 idSeleccionados.add(idUsuario);
@@ -118,8 +118,6 @@ public class LlenaGrupoActivity extends AppCompatActivity {
             }
         });
 */
-
-
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
