@@ -79,7 +79,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                view.setSelected(true);
+             //   view.setSelected(true);
                 Usuario user = (Usuario) listView.getAdapter().getItem(position);
                 idUsuario = user.getId();
                 idSeleccionados.add(idUsuario);
@@ -119,8 +119,6 @@ public class LlenaGrupoActivity extends AppCompatActivity {
         });
 */
 
-
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -132,6 +130,8 @@ public class LlenaGrupoActivity extends AppCompatActivity {
 
         backgroundTask =  new BackgroundTask(context);
         backgroundTask.execute();
+
+
 
     }
     private void setupActionBar() {
@@ -187,7 +187,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarUsuarios";
+            URLconsulta="http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/listarOpcionados?idgrupo="+String.valueOf(idGrupo);
         }
 
         @Override
@@ -236,7 +236,6 @@ public class LlenaGrupoActivity extends AppCompatActivity {
 
     }
     private void guardarDato(){
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest request = new StringRequest(Request.Method.POST, String.valueOf("http://"+getString(R.string.ipBase)+"/uptchat/index.php/chat/addUserToGroup"),
                 new Response.Listener<String>() {
@@ -256,7 +255,7 @@ public class LlenaGrupoActivity extends AppCompatActivity {
                 JSONArray json = new JSONArray(idSeleccionados);
                 HashMap<String,String> map = new HashMap<>();
                 map.put("usuarios",json.toString());
-                map.put("id_grupo",String.valueOf(idGrupo));
+                map.put("idgrupo",String.valueOf(idGrupo));
                 return map;
             }
 

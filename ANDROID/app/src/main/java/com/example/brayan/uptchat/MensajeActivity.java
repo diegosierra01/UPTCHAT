@@ -108,6 +108,9 @@ public class MensajeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(MensajeActivity.this, response, Toast.LENGTH_SHORT).show();
+                        items.clear();
+                        backgroundTask =  new BackgroundTask(context);
+                        backgroundTask.execute();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -128,15 +131,16 @@ public class MensajeActivity extends AppCompatActivity {
 
         };
         requestQueue.add(request);
-        backgroundTask =  new BackgroundTask(context);
-        backgroundTask.execute();
+        //backgroundTask =  new BackgroundTask(context);
+        //backgroundTask.execute();
+        //items.clear();
+
     }
 
 
     public void sendMsj(View view) {
         guardarDato();
-        backgroundTask =  new BackgroundTask(context);
-        backgroundTask.execute();
+        adapter.notifyDataSetChanged();
 
     }
     class BackgroundTask extends AsyncTask<Void,Void,String> {
@@ -187,7 +191,7 @@ public class MensajeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                    if(!result.equalsIgnoreCase("FALSE")) {
+                   // if(!result.equalsIgnoreCase("FALSE")) {
                         jsonObject = new JSONObject(result);
                         jsonArray = jsonObject.getJSONArray("mensajes");
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -195,14 +199,14 @@ public class MensajeActivity extends AppCompatActivity {
                             items.add(JSO.getString("nick") + ": " + JSO.getString("cadena") + "   " + JSO.getString("fecha"));
                         }
                         adapter.notifyDataSetChanged();
-                    }
+                    //}
 
             } catch (JSONException e) {
-                items.add("No hay mensajes" + "  ");
+             /*   items.add("No hay mensajes" + "  ");
                 adapter.notifyDataSetChanged();
                 e.printStackTrace();
                 Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
-
+*/
             }
         }
 

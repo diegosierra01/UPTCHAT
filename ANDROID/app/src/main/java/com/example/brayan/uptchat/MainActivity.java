@@ -113,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
                // Toast.makeText(context,tabId, Toast.LENGTH_SHORT).show();
                 switch (tabId){
                     case "mitab1":
+                        itemsUser.clear();
                         backgroundTask =  new BackgroundTask(context);
                         backgroundTask.execute();
-                        itemsUser.clear();
                         break;
                     case "mitab2":
+                        itemsGr.clear();
                         backgroundTask2 =  new BackgroundTask2(context);
                         backgroundTask2.execute();
-                        itemsGr.clear();
                         break;
                 }
 
@@ -299,8 +299,8 @@ public class MainActivity extends AppCompatActivity {
                 gruposAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
+               // e.printStackTrace();
+               // Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         }

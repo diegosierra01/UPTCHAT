@@ -46,7 +46,7 @@ android:orientation="vertical">
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Crear Grupo"
+                    android:text="Crear Grupo/Agregar integrantes"
                     android:id="@+id/button5"
                     android:contextClickable="false"
                     android:onClick="goCrearGrupo" />
